@@ -307,41 +307,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const founderContent = document.getElementById('founderContent');
   if (founderMedia) observer.observe(founderMedia);
   if (founderContent) observer.observe(founderContent);
+
+  // Vision Section
+  const visionTitle = document.getElementById('visionTitle');
+  const visionContent = document.getElementById('visionContent');
+  if (visionTitle) observer.observe(visionTitle);
+  if (visionContent) observer.observe(visionContent);
   
   // Contact Section
   const contactTitle = document.getElementById('contactTitle');
-  const formGroups = document.querySelectorAll('.form-group');
   const contactInfoItems = document.querySelectorAll('.contact-info-item');
   
   if (contactTitle) observer.observe(contactTitle);
-  formGroups.forEach((group, i) => {
-    group.style.transitionDelay = `${i * 0.1}s`;
-    observer.observe(group);
-  });
   contactInfoItems.forEach((item, i) => {
     item.style.transitionDelay = `${i * 0.15}s`;
     observer.observe(item);
-  });
-
-  // =============================================
-  // CONTACT FORM SUBMISSION
-  // =============================================
-  const contactForm = document.getElementById('contactForm');
-  const toast = document.getElementById('toast');
-  
-  contactForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    // Show toast
-    toast.classList.add('show');
-    
-    // Reset form
-    contactForm.reset();
-    
-    // Hide toast after 3 seconds
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 3000);
   });
 
   // =============================================
