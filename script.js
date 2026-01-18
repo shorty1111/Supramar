@@ -327,6 +327,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // =============================================
   // SMOOTH SCROLL FOR ANCHOR LINKS
   // =============================================
+  const logoLink = document.querySelector('a.logo');
+  if (logoLink) {
+    logoLink.addEventListener('click', (e) => {
+      if (e.defaultPrevented) return;
+      e.preventDefault();
+      setMobileMenuOpen(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
   const anchorLinks = document.querySelectorAll('a[href^="#"]');
   
   anchorLinks.forEach(link => {

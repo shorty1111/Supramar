@@ -56,6 +56,19 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Hide scrollbars (keep scrolling) */
+html,
+body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge legacy */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
 html.device-phone,
 html.device-ipad,
 html.device-phone body,
@@ -359,20 +372,6 @@ img {
   animation: fadeInUp 0.8s ease forwards 0.7s;
 }
 
-.scroll-indicator {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  transition: none;
-}
-
-.scroll-line {
-  width: 1px;
-  height: 4rem;
-  background: linear-gradient(to bottom, rgba(232, 224, 208, 0.5), transparent);
-  animation: scrollPulse 1.5s ease-in-out infinite;
-}
 
 @keyframes scrollPulse {
   0%, 100% { transform: translateY(0); }
@@ -562,6 +561,7 @@ img {
 }
 
 .founder-media {
+  border: 1px solid rgba(232, 224, 208, 0.5);
   overflow: hidden;
   aspect-ratio: 4 / 5;
   position: relative;
