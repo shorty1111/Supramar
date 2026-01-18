@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const aboutSection = document.getElementById('about');
   
   const handleHeroParallax = () => {
-    if (!heroImg || !heroOverlay || !heroContent || !scrollIndicator) return;
+    if (!heroOverlay || !heroContent) return;
     const scrollY = window.scrollY;
     const windowHeight = window.innerHeight;
     const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -191,9 +191,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const scaleDistance = 800;
     const scale = 1 + (Math.min(scrollY / scaleDistance, 1) * maxScaleIncrease);
     if (maxScaleIncrease > 0) {
-      heroImg.style.transform = `translate3d(0, 0, 0) scale(${scale})`;
+      if (heroImg) heroImg.style.transform = `translate3d(0, 0, 0) scale(${scale})`;
     } else {
-      heroImg.style.transform = '';
+      if (heroImg) heroImg.style.transform = '';
     }
     
     // Keep overlay readable, but fade hero content fully out by the time
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
     heroOverlay.style.opacity = overlayOpacity;
     heroContent.style.opacity = combinedOpacity;
     heroContent.style.pointerEvents = combinedOpacity < 0.05 ? 'none' : '';
-    scrollIndicator.style.opacity = combinedOpacity;
+    if (scrollIndicator) scrollIndicator.style.opacity = combinedOpacity;
   };
 
   // =============================================
@@ -327,6 +327,76 @@ document.addEventListener('DOMContentLoaded', () => {
   // =============================================
   // SMOOTH SCROLL FOR ANCHOR LINKS
   // =============================================
+  const sectionIndicator = document.querySelector('.section-indicator');
+  const sectionIndicatorLinks = document.querySelectorAll('.section-indicator-link');
+  const heroSpacer = document.querySelector('.hero-spacer');
+  const sectionIds = Array.from(sectionIndicatorLinks)
+    .map((link) => link.getAttribute('data-section'))
+    .filter(Boolean);
+  const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
+  const nonHeroSections = sections.filter((section) => section.id !== 'hero');
+
+  const setActiveSection = (id) => {
+    sectionIndicatorLinks.forEach((link) => {
+      link.classList.toggle('active', link.getAttribute('data-section') === id);
+    });
+  };
+
+  const updateActiveSectionFromScroll = () => {
+    if (!sectionIndicator) return;
+    if (sections.length === 0) return;
+
+    const heroThreshold = (heroSpacer?.offsetHeight ?? window.innerHeight) * 0.5;
+    if (window.scrollY < heroThreshold) {
+      setActiveSection('hero');
+      return;
+    }
+
+    const focusY = window.innerHeight * 0.4;
+    let activeId = null;
+
+    for (const section of nonHeroSections) {
+      const rect = section.getBoundingClientRect();
+      if (rect.top <= focusY && rect.bottom >= focusY) {
+        activeId = section.id;
+        break;
+      }
+    }
+
+    if (!activeId) {
+      let bestId = nonHeroSections[0]?.id ?? sections[0].id;
+      let bestDist = Number.POSITIVE_INFINITY;
+      for (const section of nonHeroSections) {
+        const dist = Math.abs(section.getBoundingClientRect().top - focusY);
+        if (dist < bestDist) {
+          bestDist = dist;
+          bestId = section.id;
+        }
+      }
+      activeId = bestId;
+    }
+
+    setActiveSection(activeId);
+  };
+
+  if (sectionIndicator && sections.length > 0) {
+    updateActiveSectionFromScroll();
+
+    let indicatorTicking = false;
+    const onIndicatorScroll = () => {
+      if (indicatorTicking) return;
+      indicatorTicking = true;
+      window.requestAnimationFrame(() => {
+        indicatorTicking = false;
+        updateActiveSectionFromScroll();
+      });
+    };
+
+    window.addEventListener('scroll', onIndicatorScroll, { passive: true });
+    window.addEventListener('resize', onIndicatorScroll);
+    window.addEventListener('hashchange', updateActiveSectionFromScroll);
+  }
+
   const logoLink = document.querySelector('a.logo');
   if (logoLink) {
     logoLink.addEventListener('click', (e) => {
@@ -346,6 +416,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (href === '#') return;
       
       e.preventDefault();
+      if (href === '#hero') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
       const target = document.querySelector(href);
       
       if (target) {
