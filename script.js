@@ -220,24 +220,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // =============================================
-  // PARALLAX TEXT EFFECT
-  // =============================================
-  const parallaxText1 = document.getElementById('parallaxText1');
-  const parallaxText2 = document.getElementById('parallaxText2');
-  
-  const handleParallaxText = () => {
-    if (disableHeavyEffects) return;
-    const scrollY = window.scrollY;
-    
-    if (parallaxText1) {
-      parallaxText1.style.transform = `translateX(${-scrollY * 0.5}px)`;
-    }
-    if (parallaxText2) {
-      parallaxText2.style.transform = `translateX(${-scrollY * 0.5 + 300}px)`;
-    }
-  };
-
-  // =============================================
   // CONTACT BACKGROUND PARALLAX
   // =============================================
   const contactBg = document.getElementById('contactBg');
@@ -268,7 +250,6 @@ document.addEventListener('DOMContentLoaded', () => {
       scrollTicking = false;
       handleHeaderScroll();
       handleHeroParallax();
-      handleParallaxText();
       handleContactParallax();
     });
   };

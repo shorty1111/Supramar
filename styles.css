@@ -595,27 +595,6 @@ img {
 }
 
 /* =============================================
-   PARALLAX DIVIDER
-   ============================================= */
-.parallax-divider {
-  padding: 3rem 0;
-  overflow: hidden;
-  border-top: 1px solid rgba(232, 224, 208, 0.1);
-  border-bottom: 1px solid rgba(232, 224, 208, 0.1);
-  background-color: var(--background);
-}
-
-.parallax-text {
-  font-size: clamp(3rem, 8vw, 6rem);
-  font-weight: 300;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(232, 224, 208, 0.1);
-  white-space: nowrap;
-  will-change: transform;
-}
-
-/* =============================================
    FOUNDER SECTION - bg-background (Black)
    ============================================= */
 .founder {
