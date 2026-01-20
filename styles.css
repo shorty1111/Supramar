@@ -56,6 +56,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+em,
+i {
+  font-style: normal !important;
+}
+
 /* Hide scrollbars (keep scrolling) */
 html,
 body {
@@ -490,7 +495,7 @@ img {
 }
 
 /* =============================================
-   ABOUT SECTION - bg-muted (Light Gray #f2f2f2)
+   ABOUT SECTION - Cream Background
    ============================================= */
 .about {
   padding: 8rem 1.5rem;
@@ -499,7 +504,8 @@ img {
   min-height: 50svh;
   display: flex;
   align-items: center;
-  background-color: var(--muted);
+  background-color: var(--foreground);
+  color: var(--accent);
 }
 
 .about-container {
@@ -520,7 +526,7 @@ img {
   font-weight: 300;
   letter-spacing: -0.02em;
   line-height: 0.9;
-  color: var(--muted-foreground);
+  color: var(--accent);
   opacity: 0;
   transform: translateX(-100px) rotate(-5deg);
   transition: all 0.8s ease;
@@ -549,7 +555,7 @@ img {
 
 .about-text {
   font-size: 1.125rem;
-  color: rgba(77, 77, 77, 0.8);
+  color: rgba(61, 48, 42, 0.78);
   margin-bottom: 1.5rem;
   font-weight: 300;
   line-height: 1.8;
@@ -590,7 +596,7 @@ img {
   font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: rgba(77, 77, 77, 0.6);
+  color: rgba(61, 48, 42, 0.6);
   margin-top: 0.5rem;
 }
 
@@ -621,10 +627,6 @@ img {
   font-size: clamp(2.25rem, 4vw, 3.75rem);
   font-weight: 300;
   margin-bottom: 2rem;
-}
-
-.founder-title .italic {
-  font-style: italic;
 }
 
 .founder-grid {
@@ -689,8 +691,8 @@ img {
    ============================================= */
 .vision {
   padding: 8rem 1.5rem;
-  background-color: var(--muted);
-  color: var(--primary-foreground);
+  background-color: var(--foreground);
+  color: var(--accent);
 }
 
 .vision-container {
@@ -711,7 +713,7 @@ img {
   font-weight: 300;
   letter-spacing: -0.02em;
   line-height: 0.9;
-  color: rgba(0, 0, 0, 0.85);
+  color: var(--accent);
   opacity: 0;
   transform: translateX(-100px) rotate(-5deg);
   transition: all 0.8s ease;
@@ -740,7 +742,7 @@ img {
 
 .vision-text {
   font-size: 1.125rem;
-  color: rgba(0, 0, 0, 0.75);
+  color: rgba(61, 48, 42, 0.78);
   margin-bottom: 1.5rem;
   font-weight: 300;
   line-height: 1.8;
@@ -796,10 +798,6 @@ img {
   opacity: 0;
   transform: scale(0.8);
   transition: all 0.8s ease;
-}
-
-.contact-title .italic {
-  font-style: italic;
 }
 
 .contact-title.visible {
