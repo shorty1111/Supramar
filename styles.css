@@ -512,8 +512,8 @@ img {
   max-width: 1400px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(2rem, 4vw, 4rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: clamp(2rem, 5vw, 6rem);
   align-items: center;
 }
 
@@ -554,7 +554,7 @@ img {
 }
 
 .about-text {
-  font-size: 1.125rem;
+  font-size: 1.0rem;
   color: rgba(61, 48, 42, 0.78);
   margin-bottom: 1.5rem;
   font-weight: 300;
@@ -699,8 +699,8 @@ img {
   max-width: 1400px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(2rem, 4vw, 4rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: clamp(2rem, 5vw, 6rem);
   align-items: center;
 }
 
@@ -741,7 +741,7 @@ img {
 }
 
 .vision-text {
-  font-size: 1.125rem;
+  font-size: 1.0rem;
   color: rgba(61, 48, 42, 0.78);
   margin-bottom: 1.5rem;
   font-weight: 300;
