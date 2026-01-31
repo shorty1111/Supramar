@@ -413,6 +413,29 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // =============================================
+  // REVEAL PHONE NUMBER (anti-scrape friendly UX)
+  // =============================================
+  const revealPhoneButtons = document.querySelectorAll('.js-reveal-phone');
+
+  revealPhoneButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const wrapper = btn.closest('.contact-reveal');
+      const phoneText = wrapper?.getAttribute('data-phone');
+      const telValue = wrapper?.getAttribute('data-tel');
+      const phoneLink = wrapper?.querySelector('.js-phone-link');
+
+      if (!wrapper || !phoneText || !telValue || !phoneLink) return;
+
+      phoneLink.textContent = phoneText;
+      phoneLink.setAttribute('href', `tel:${telValue}`);
+      phoneLink.hidden = false;
+
+      btn.hidden = true;
+      btn.setAttribute('aria-expanded', 'true');
+    });
+  });
+
+  // =============================================
   // HOVER EFFECTS FOR BUTTONS
   // =============================================
   const buttons = document.querySelectorAll('.btn-primary');

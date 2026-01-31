@@ -7,7 +7,6 @@
   <meta name="description" content="A private, appointment-only fitness club on Park Avenue in Midtown Manhattan, steps from Fifth Avenue, offering personalized training in a discreet, luxury environment.">
   <link rel="icon" type="image/webp" href="img/supramar-private-gym-logo.webp?v=20260117-01">
   <link rel="shortcut icon" type="image/webp" href="img/supramar-private-gym-logo.webp?v=20260117-01">
-  <link rel="preload" as="image" href="img/private-luxury-gym-manhattan-hero.webp?v=20260117-01" fetchpriority="high">
   
   <!-- Google Fonts - Sora -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -191,7 +190,13 @@
           </div>
           <div class="contact-info-item">
             <p class="contact-info-label">Phone</p>
-            <p class="contact-info-value"><a href="tel:+381111234567">+381 11 123 4567</a></p>
+            <p class="contact-info-value">
+              <span class="contact-reveal" data-phone="+1 714 280 2248" data-tel="+17142802248">
+                <button type="button" class="contact-reveal-btn js-reveal-phone" aria-expanded="false">Show number</button>
+                <a class="contact-phone-link js-phone-link" href="tel:+17142802248" hidden>+1 714 280 2248</a>
+                <noscript><a class="contact-phone-link" href="tel:+17142802248">+1 714 280 2248</a></noscript>
+              </span>
+            </p>
           </div>
         </div>
       </div>
@@ -203,7 +208,7 @@
         <a href="#hero" class="footer-logo">SupraMar</a>
         <p class="footer-text">© 2025 SupraMar Fitness Club. All rights reserved.</p>
         <div class="footer-social">
-          <a href="#noop" class="social-link" aria-label="Instagram">
+          <a href="https://www.instagram.com/supramar.nyc/" class="social-link" aria-label="Instagram">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
               <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
