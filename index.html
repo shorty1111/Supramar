@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>SupraMar | Private Luxury Fitness Club on Park Avenue, Manhattan</title>
   <meta name="description" content="A private, appointment-only fitness club on Park Avenue in Midtown Manhattan, steps from Fifth Avenue, offering personalized training in a discreet, luxury environment.">
   <link rel="icon" type="image/webp" href="img/supramar-private-gym-logo.webp?v=20260117-01">
@@ -22,7 +22,7 @@
     <nav class="nav">
       <div class="nav-left">
         <a href="#about" class="nav-link">About Us</a>
-        <a href="#vision" class="nav-link">Our Vision</a>
+        <a href="#founder" class="nav-link">Founder</a>
       </div>
       
       <a href="#hero" class="logo" aria-label="SupraMar">
@@ -30,7 +30,7 @@
       </a>
       
       <div class="nav-right">
-        <a href="#founder" class="nav-link">Founder</a>
+        <a href="#vision" class="nav-link">Our Vision</a>
         <a href="#contact" class="nav-link">Contact</a>
       </div>
       
@@ -47,8 +47,8 @@
   <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
     <a href="#about" class="mobile-nav-link">About Us</a>
-    <a href="#vision" class="mobile-nav-link">Our Vision</a>
     <a href="#founder" class="mobile-nav-link">Founder</a>
+    <a href="#vision" class="mobile-nav-link">Our Vision</a>
     <a href="#contact" class="mobile-nav-link">Contact</a>
   </div>
 
@@ -60,15 +60,15 @@
     </a>
     <a class="section-indicator-link" href="#about" data-section="about">
       <span class="section-indicator-dot" aria-hidden="true"></span>
-      <span class="section-indicator-label">About</span>
-    </a>
-    <a class="section-indicator-link" href="#vision" data-section="vision">
-      <span class="section-indicator-dot" aria-hidden="true"></span>
-      <span class="section-indicator-label">Our Vision</span>
+      <span class="section-indicator-label">About Us</span>
     </a>
     <a class="section-indicator-link" href="#founder" data-section="founder">
       <span class="section-indicator-dot" aria-hidden="true"></span>
       <span class="section-indicator-label">Founder</span>
+    </a>
+    <a class="section-indicator-link" href="#vision" data-section="vision">
+      <span class="section-indicator-dot" aria-hidden="true"></span>
+      <span class="section-indicator-label">Our Vision</span>
     </a>
 
     <a class="section-indicator-link" href="#contact" data-section="contact">
@@ -80,7 +80,10 @@
   <!-- Hero Section (Fixed Background) -->
   <section class="hero" id="hero">
     <div class="hero-bg" id="heroBg">
-      <img src="img/private-luxury-gym-manhattan-hero.webp?v=20260117-01" alt="Private luxury fitness club interior on Park Avenue in Manhattan" loading="eager" decoding="async" fetchpriority="high">
+      <picture>
+        <source media="(max-width: 768px)" srcset="img/private-luxury-gym-manhattan-hero_2.webp?v=20260204-01">
+        <img src="img/private-luxury-gym-manhattan-hero.webp?v=20260117-01" alt="Private luxury fitness club interior on Park Avenue in Manhattan" loading="eager" decoding="async" fetchpriority="high">
+      </picture>
     </div>
     <div class="hero-overlay" id="heroOverlay"></div>
     <div class="hero-content" id="heroContent">
@@ -89,12 +92,13 @@
         Private Fitness<br>
         in Manhattan
       </h1>
-      <a href="#contact" class="btn-primary">Request a Private Consultation</a>
+      <a class="btn-primary" href="mailto:jadi@supramar.com?subject=Private%20Consultation%20Request" target="_blank" rel="noopener noreferrer">Request a Private Consultation</a>
     </div>
   </section>
   
   <!-- Hero Spacer -->
-  <div class="hero-spacer"></div>
+  <div class="page-scroll" id="pageScroll">
+    <div class="hero-spacer"></div>
 
   <!-- Main Content (Scrolls over hero) -->
   <main class="main-content">
@@ -123,16 +127,17 @@
           </p>
           <div class="about-stats">
             <div class="stat">
-              <span class="stat-number">15+</span>
-              <span class="stat-label">Years of experience</span>
+              <span class="stat-number">25+</span>
+              <span class="stat-label">Years of focused private training</span>
             </div>
             <div class="stat">
-              <span class="stat-number">500+</span>
-              <span class="stat-label">Members</span>
+              <span class="stat-number">10+</span>
+              <span class="stat-label">Years in Midtown Manhattan</span>
             </div>
             <div class="stat">
-              <span class="stat-number">12</span>
-              <span class="stat-label">Elite coaches</span>
+              <span class="stat-number stat-number--placeholder" aria-hidden="true">&nbsp;</span>
+              <span class="stat-label">Appointment-only</span>
+              <span class="stat-label">By design</span>
             </div>
           </div>
         </div>
@@ -142,8 +147,8 @@
     <!-- Founder Section - Black Background -->
     <section class="founder" id="founder">
       <div class="founder-container">
-        <p class="founder-kicker">Meet the Founder</p>
-        <h2 class="founder-title">Meet the Founder</h2>
+        <p class="founder-kicker">Meet our Founder</p>
+        <h2 class="founder-title">Meet our Founder</h2>
 
         <div class="founder-grid">
           <div class="founder-media" id="founderMedia">
@@ -151,7 +156,7 @@
           </div>
           <div class="founder-content" id="founderContent">
             <div class="founder-text">
-              <p>SupraMar was founded by Jadi, a Croatian-born elite water polo athlete shaped early by a sport that demands discipline, structure, and composure.</p>
+              <p>SupraMar was founded by Jadi Pocekaj, a Croatian-born elite water polo athlete shaped early by a sport that demands discipline, structure, and composure.</p>
               <p>A motorcycle accident that resulted in the fracture of both legs brought his elite athletic career to an end and prompted a shift from competition to coaching. That transition marked the beginning of his work in private training, where he began supporting individuals whose demands extended well beyond fitness.</p>
               <p>Over time, executives, public figures, and families accustomed to the highest levels of discretion gravitated toward his work for its rigor, methodical progression, and long-term sustainability. He quietly developed a reputation built through consistency, attention, and an environment where members are genuinely known rather than managed.</p>
               <p>SupraMar was created to formalize that work. Not as a public-facing gym, but as a controlled environment designed for people who understand that meaningful progress requires commitment and care over time.</p>
@@ -191,7 +196,7 @@
         </div>
 
         <div class="contact-cta">
-          <a class="btn-primary" href="mailto:info@supramar.com?subject=Private%20Consultation%20Request">Request a Private Consultation</a>
+          <a class="btn-primary" href="mailto:jadi@supramar.com?subject=Private%20Consultation%20Request" target="_blank" rel="noopener noreferrer">Request a Private Consultation</a>
         </div>
 
         <p class="contact-message">For private inquiries, please email or call &mdash; we reply promptly.</p>
@@ -206,7 +211,7 @@
           </div>
           <div class="contact-info-item">
             <p class="contact-info-label">Email</p>
-            <p class="contact-info-value"><a href="mailto:info@supramar.com">info@supramar.com</a></p>
+            <p class="contact-info-value"><a href="mailto:jadi@supramar.com" target="_blank" rel="noopener noreferrer">jadi@supramar.com</a></p>
           </div>
           <div class="contact-info-item">
             <p class="contact-info-label">Phone</p>
@@ -239,6 +244,7 @@
       </div>
     </footer>
   </main>
+  </div>
 
   <script src="script.js?v=20260117-016"></script>
 </body>

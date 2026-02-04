@@ -45,6 +45,7 @@
 html {
   scroll-behavior: smooth;
   overflow-x: clip;
+  overflow-y: hidden;
 }
 
 body {
@@ -53,6 +54,7 @@ body {
   color: var(--foreground);
   line-height: 1.6;
   overflow-x: clip;
+  overflow-y: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -79,6 +81,11 @@ html.device-ipad,
 html.device-phone body,
 html.device-ipad body {
   overscroll-behavior-y: none;
+}
+
+html.device-ios,
+html.device-ios body {
+  height: 100%;
 }
 
 @supports not (overflow: clip) {
@@ -390,6 +397,30 @@ img {
   height: calc(var(--vh, 1vh) * 100);
   height: 100svh;
   z-index: 0;
+  transition: opacity 0.2s ease;
+}
+
+.hero.is-hidden {
+  opacity: 0;
+}
+
+.page-scroll {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  overflow-y: auto;
+  overflow-x: clip;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+.page-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.page-scroll.scroll-locked {
+  overflow: hidden;
 }
 
 .hero-spacer {
@@ -402,6 +433,12 @@ img {
   position: absolute;
   inset: 0;
   overflow: hidden;
+}
+
+.hero-bg picture {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .hero-bg img {
@@ -592,12 +629,24 @@ img {
   color: var(--secondary);
 }
 
+.stat-number--placeholder {
+  visibility: hidden;
+}
+
 .stat-label {
   font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: rgba(61, 48, 42, 0.6);
+  margin-top: 0;
+}
+
+.stat-number + .stat-label {
   margin-top: 0.5rem;
+}
+
+.stat-label + .stat-label {
+  margin-top: 0.25rem;
 }
 
 /* =============================================
@@ -956,21 +1005,20 @@ img {
   overflow: hidden;
   --footer-hope-x: 40%;
   --footer-hope-y: 55%;
-  --footer-hope-zoom: 1.12;
+  /* "Zoom" without transforms (prevents iOS Safari bottom-scroll repaint quirks) */
+  --footer-hope-bleed: 0%;
 }
 
 .footer::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: calc(var(--footer-hope-bleed) * -1);
   background-image: url("img/footer_hope.jpeg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: var(--footer-hope-x) var(--footer-hope-y);
   opacity: 0.22;
   pointer-events: none;
-  transform: scale(var(--footer-hope-zoom));
-  transform-origin: var(--footer-hope-x) var(--footer-hope-y);
 }
 
 .footer-container {
@@ -1048,13 +1096,8 @@ img {
 
 @media (max-width: 600px) {
   .footer {
-    --footer-hope-zoom: 3;
     --footer-hope-x: 50%;
-    --footer-hope-y: 50%;
-  }
-
-  .footer::before {
-    transform-origin: 46% 61%;
+    --footer-hope-y: 55%;
   }
 }
 
@@ -1072,14 +1115,9 @@ img {
 
 /* Tablet */
 @media (max-width: 1024px) {
-    .footer {
-    --footer-hope-zoom: 3;
+  .footer {
     --footer-hope-x: 50%;
     --footer-hope-y: 50%;
-  }
-
-  .footer::before {
-    transform-origin: 48% 58%;
   }
   .nav-link {
     font-size: 0.7rem;
@@ -1112,6 +1150,17 @@ img {
 
   .header.scrolled {
     backdrop-filter: none;
+  }
+
+  .footer {
+    --footer-hope-bleed: 0%;
+  }
+
+  .hero,
+  .hero-spacer {
+    height: 92vh;
+    height: calc(var(--vh, 1vh) * 92);
+    height: 92svh;
   }
 
   .hero-subtitle {

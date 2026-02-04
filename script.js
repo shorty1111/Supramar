@@ -16,46 +16,115 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (isPhone) document.documentElement.classList.add('device-phone');
   if (isIPad) document.documentElement.classList.add('device-ipad');
+  if (isIPhone || isIPad) document.documentElement.classList.add('device-ios');
+  if (isAndroidPhone) document.documentElement.classList.add('device-android');
+
+  const pageScroll = document.getElementById('pageScroll');
+  const getScrollTop = () => (pageScroll ? pageScroll.scrollTop : window.scrollY || window.pageYOffset || 0);
+  const scrollToTop = () => {
+    if (pageScroll) {
+      pageScroll.scrollTop = 0;
+      return;
+    }
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  };
 
   // Stable viewport height for iOS Safari (address bar / toolbar resizing)
   const setVhVar = () => {
-    document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+    const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+    document.documentElement.style.setProperty('--vh', `${viewportHeight * 0.01}px`);
   };
   setVhVar();
   window.addEventListener('resize', setVhVar);
   window.addEventListener('orientationchange', setVhVar);
+  window.visualViewport?.addEventListener('resize', setVhVar);
+  window.visualViewport?.addEventListener('scroll', setVhVar);
 
-  // Prevent iOS rubber-band overscroll revealing fixed hero behind the page
-  if (isIPhone || isIPad) {
+  // Prevent iOS rubber-band overscroll on our custom scroll container (avoids the "zoom" bounce at the very bottom)
+  if ((isIPhone || isIPad) && pageScroll) {
     let lastTouchY = 0;
 
-    window.addEventListener(
+    pageScroll.addEventListener(
       'touchstart',
       (e) => {
         lastTouchY = e.touches?.[0]?.clientY ?? 0;
+
+        // Nudge away from the exact edges to avoid iOS elastic "pull past end" revealing content behind.
+        const scrollTop = pageScroll.scrollTop || 0;
+        const maxScrollTop = Math.max(0, (pageScroll.scrollHeight || 0) - (pageScroll.clientHeight || 0));
+        if (scrollTop <= 0 && maxScrollTop > 0) pageScroll.scrollTop = 1;
+        else if (scrollTop >= maxScrollTop && maxScrollTop > 0) pageScroll.scrollTop = maxScrollTop - 1;
       },
       { passive: true }
     );
 
-    window.addEventListener(
+    pageScroll.addEventListener(
       'touchmove',
       (e) => {
+        if (!e.cancelable) return;
         if (document.body.classList.contains('scroll-locked')) return;
+
         const currentTouchY = e.touches?.[0]?.clientY ?? lastTouchY;
         const deltaY = currentTouchY - lastTouchY;
         lastTouchY = currentTouchY;
 
-        const scrollTop = window.scrollY || window.pageYOffset || 0;
-        const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight || 0;
-        const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+        const scrollTop = pageScroll.scrollTop || 0;
+        const maxScrollTop = Math.max(0, (pageScroll.scrollHeight || 0) - (pageScroll.clientHeight || 0));
         const atTop = scrollTop <= 0;
-        const atBottom = scrollTop + viewportHeight >= scrollHeight - 1;
+        const atBottom = scrollTop >= maxScrollTop - 1;
 
         if ((atTop && deltaY > 0) || (atBottom && deltaY < 0)) {
           e.preventDefault();
         }
       },
       { passive: false }
+    );
+  }
+
+  // Prevent iOS rubber-band overscroll revealing fixed hero behind the page
+  if ((isIPhone || isIPad) && !pageScroll) {
+    let lastTouchY = 0;
+    const getScrollingElement = () => document.scrollingElement || document.documentElement;
+
+    document.addEventListener(
+      'touchstart',
+      (e) => {
+        lastTouchY = e.touches?.[0]?.clientY ?? 0;
+
+        // iOS Safari rubber-band (bounce) happens when scrolling is exactly at 0 or max.
+        // Nudge scroll position by 1px to keep the page in the scrollable range.
+        const scrollingElement = getScrollingElement();
+        const scrollTop = scrollingElement.scrollTop || 0;
+        const maxScrollTop = Math.max(0, (scrollingElement.scrollHeight || 0) - (scrollingElement.clientHeight || 0));
+
+        if (scrollTop <= 0 && maxScrollTop > 0) scrollingElement.scrollTop = 1;
+        else if (scrollTop >= maxScrollTop && maxScrollTop > 0) scrollingElement.scrollTop = maxScrollTop - 1;
+      },
+      { passive: true, capture: true }
+    );
+
+    document.addEventListener(
+      'touchmove',
+      (e) => {
+        if (document.body.classList.contains('scroll-locked')) return;
+        if (!e.cancelable) return;
+        const currentTouchY = e.touches?.[0]?.clientY ?? lastTouchY;
+        const deltaY = currentTouchY - lastTouchY;
+        lastTouchY = currentTouchY;
+
+        const scrollingElement = getScrollingElement();
+        const scrollTop = scrollingElement.scrollTop || 0;
+        const scrollHeight = scrollingElement.scrollHeight || 0;
+        const clientHeight = scrollingElement.clientHeight || 0;
+        const maxScrollTop = Math.max(0, scrollHeight - clientHeight);
+        const atTop = scrollTop <= 0;
+        const atBottom = scrollTop >= maxScrollTop - 1;
+
+        if ((atTop && deltaY > 0) || (atBottom && deltaY < 0)) {
+          e.preventDefault();
+        }
+      },
+      { passive: false, capture: true }
     );
   }
 
@@ -66,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   const handleHeaderScroll = () => {
     if (!header) return;
-    if (window.scrollY > 100) {
+    if (getScrollTop() > 100) {
       header.classList.add('scrolled');
     } else {
       header.classList.remove('scrolled');
@@ -87,9 +156,10 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const lockScroll = () => {
-    scrollLockY = window.scrollY || window.pageYOffset || 0;
+    scrollLockY = getScrollTop();
     document.documentElement.classList.add('scroll-locked');
     document.body.classList.add('scroll-locked');
+    pageScroll?.classList.add('scroll-locked');
 
     if (!touchMoveLocked) {
       document.addEventListener('touchmove', preventDocumentTouchMove, { passive: false });
@@ -100,17 +170,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const unlockScroll = () => {
     document.documentElement.classList.remove('scroll-locked');
     document.body.classList.remove('scroll-locked');
+    pageScroll?.classList.remove('scroll-locked');
 
     if (touchMoveLocked) {
       document.removeEventListener('touchmove', preventDocumentTouchMove, { passive: false });
       touchMoveLocked = false;
     }
 
-    const currentY = window.scrollY || window.pageYOffset || 0;
+    const currentY = getScrollTop();
     if (Math.abs(currentY - scrollLockY) > 1) {
       const prevScrollBehavior = document.documentElement.style.scrollBehavior;
       document.documentElement.style.scrollBehavior = 'auto';
-      window.scrollTo(0, scrollLockY);
+      if (pageScroll) pageScroll.scrollTop = scrollLockY;
+      else window.scrollTo(0, scrollLockY);
       document.documentElement.style.scrollBehavior = prevScrollBehavior;
     }
   };
@@ -179,10 +251,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const scrollIndicator = document.getElementById('scrollIndicator');
   const heroImg = heroBg ? heroBg.querySelector('img') : null;
   const aboutSection = document.getElementById('about');
+  const heroSection = document.getElementById('hero');
+  const heroSpacerEl = document.querySelector('.hero-spacer');
   
+  const updateHeroVisibility = () => {
+    if (!pageScroll || !heroSection) return;
+    const heroHeight = heroSpacerEl?.offsetHeight ?? window.innerHeight;
+    heroSection.classList.toggle('is-hidden', getScrollTop() > heroHeight * 0.85);
+  };
+
   const handleHeroParallax = () => {
     if (!heroOverlay || !heroContent) return;
-    const scrollY = window.scrollY;
+    const scrollY = getScrollTop();
     const windowHeight = window.innerHeight;
     const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
     
@@ -249,12 +329,14 @@ document.addEventListener('DOMContentLoaded', () => {
     window.requestAnimationFrame(() => {
       scrollTicking = false;
       handleHeaderScroll();
+      updateHeroVisibility();
       handleHeroParallax();
       handleContactParallax();
     });
   };
 
-  window.addEventListener('scroll', handleScroll, { passive: true });
+  if (pageScroll) pageScroll.addEventListener('scroll', handleScroll, { passive: true });
+  else window.addEventListener('scroll', handleScroll, { passive: true });
   window.addEventListener('resize', handleScroll);
   handleScroll();
 
@@ -328,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sections.length === 0) return;
 
     const heroThreshold = (heroSpacer?.offsetHeight ?? window.innerHeight) * 0.5;
-    if (window.scrollY < heroThreshold) {
+    if (getScrollTop() < heroThreshold) {
       setActiveSection('hero');
       return;
     }
@@ -373,7 +455,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     };
 
-    window.addEventListener('scroll', onIndicatorScroll, { passive: true });
+    if (pageScroll) pageScroll.addEventListener('scroll', onIndicatorScroll, { passive: true });
+    else window.addEventListener('scroll', onIndicatorScroll, { passive: true });
     window.addEventListener('resize', onIndicatorScroll);
     window.addEventListener('hashchange', updateActiveSectionFromScroll);
   }
@@ -384,9 +467,20 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.defaultPrevented) return;
       e.preventDefault();
       setMobileMenuOpen(false);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollToTop();
     });
   }
+
+  // Ensure mailto links reliably trigger the email client (some in-app browsers / overlays can interfere)
+  const mailtoLinks = document.querySelectorAll('a[href^="mailto:"]');
+  mailtoLinks.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (!href) return;
+      e.preventDefault();
+      window.location.href = href;
+    });
+  });
 
   const anchorLinks = document.querySelectorAll('a[href^="#"]');
   
@@ -398,7 +492,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       e.preventDefault();
       if (href === '#hero') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        scrollToTop();
         return;
       }
       const target = document.querySelector(href);
