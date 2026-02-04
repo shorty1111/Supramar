@@ -812,6 +812,27 @@ img {
   font-weight: 300;
 }
 
+.contact-copy {
+  max-width: 66ch;
+  margin: 0 auto 2.25rem;
+  color: rgba(232, 224, 208, 0.75);
+  font-weight: 300;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.contact-copy p {
+  margin: 0 0 1rem;
+}
+
+.contact-copy p:last-child {
+  margin-bottom: 0;
+}
+
+.contact-cta {
+  margin-bottom: 2.5rem;
+}
+
 .btn-primary {
   display: inline-block;
   padding: 1rem 2rem;
@@ -931,6 +952,25 @@ img {
   padding: 4rem 2rem;
   border-top: 1px solid rgba(232, 224, 208, 0.1);
   background-color: var(--background);
+  position: relative;
+  overflow: hidden;
+  --footer-hope-x: 40%;
+  --footer-hope-y: 55%;
+  --footer-hope-zoom: 1.12;
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("img/footer_hope.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: var(--footer-hope-x) var(--footer-hope-y);
+  opacity: 0.22;
+  pointer-events: none;
+  transform: scale(var(--footer-hope-zoom));
+  transform-origin: var(--footer-hope-x) var(--footer-hope-y);
 }
 
 .footer-container {
@@ -940,6 +980,8 @@ img {
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 .footer-logo {
@@ -1004,6 +1046,18 @@ img {
   }
 }
 
+@media (max-width: 600px) {
+  .footer {
+    --footer-hope-zoom: 3;
+    --footer-hope-x: 50%;
+    --footer-hope-y: 50%;
+  }
+
+  .footer::before {
+    transform-origin: 46% 61%;
+  }
+}
+
 @media (max-width: 1200px) {
   .about-container {
     grid-template-columns: 1fr;
@@ -1018,6 +1072,15 @@ img {
 
 /* Tablet */
 @media (max-width: 1024px) {
+    .footer {
+    --footer-hope-zoom: 3;
+    --footer-hope-x: 50%;
+    --footer-hope-y: 50%;
+  }
+
+  .footer::before {
+    transform-origin: 48% 58%;
+  }
   .nav-link {
     font-size: 0.7rem;
   }
@@ -1062,6 +1125,61 @@ img {
   
   .contact {
     padding: 5rem 1.5rem;
+  }
+}
+
+/* Landscape devices with limited vertical space (prevents hero/header overlap) */
+@media (hover: none) and (pointer: coarse) and (min-width: 769px) and (max-height: 600px) and (orientation: landscape) {
+  .header {
+    padding: 0.75rem 1.5rem;
+  }
+
+  .logo-img {
+    height: 48px;
+  }
+
+  .hero-content {
+    justify-content: flex-start;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 6.5rem);
+    padding-bottom: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 0.28em;
+    margin-bottom: 1rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    margin-bottom: 1.25rem;
+  }
+}
+
+/* Touch landscape phones with short height (keeps hero clear of fixed header) */
+@media (hover: none) and (pointer: coarse) and (max-height: 600px) and (orientation: landscape) {
+  .header {
+    padding: 0.75rem 1.25rem;
+  }
+
+  .logo-img {
+    height: 44px;
+  }
+
+  .hero-content {
+    justify-content: flex-start;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 6rem);
+    padding-bottom: 2rem;
+  }
+
+  .hero-subtitle {
+    top: 0;
+    margin-bottom: 0.9rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.15rem, 6vw, 3.5rem);
+    margin-bottom: 1.1rem;
   }
 }
 
