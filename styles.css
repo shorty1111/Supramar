@@ -1003,49 +1003,63 @@ img {
   background-color: var(--background);
   position: relative;
   overflow: hidden;
-  --footer-hope-x: 40%;
-  --footer-hope-y: 55%;
-  /* "Zoom" without transforms (prevents iOS Safari bottom-scroll repaint quirks) */
-  --footer-hope-bleed: 0%;
 }
 
 .footer::before {
   content: "";
   position: absolute;
-  inset: calc(var(--footer-hope-bleed) * -1);
+  inset: 0;
   background-image: url("img/footer_hope.jpeg");
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: var(--footer-hope-x) var(--footer-hope-y);
+  background-position: center center;
   opacity: 0.22;
   pointer-events: none;
 }
 
 .footer-container {
   max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  justify-content: space-between;
+  min-height: 6.5rem;
+  gap: 0.75rem;
   position: relative;
   z-index: 1;
 }
 
 .footer-logo {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.1em;
 }
 
 .footer-text {
   font-size: 0.75rem;
   color: rgba(232, 224, 208, 0.5);
+  text-align: center;
+  transform: translateY(8px);
+}
+
+.footer-social-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .footer-social {
   display: flex;
   gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
 }
 
 .social-link {
@@ -1060,6 +1074,12 @@ img {
 /* =============================================
    RESPONSIVE DESIGN
    ============================================= */
+
+@media (min-width: 1025px) and (hover: hover) and (pointer: fine) {
+  .footer::before {
+    background-size: 80% auto;
+  }
+}
 
 @media (max-width: 960px) {
   .nav-left, .nav-right {
@@ -1094,13 +1114,6 @@ img {
   }
 }
 
-@media (max-width: 600px) {
-  .footer {
-    --footer-hope-x: 50%;
-    --footer-hope-y: 55%;
-  }
-}
-
 @media (max-width: 1200px) {
   .about-container {
     grid-template-columns: 1fr;
@@ -1115,10 +1128,7 @@ img {
 
 /* Tablet */
 @media (max-width: 1024px) {
-  .footer {
-    --footer-hope-x: 50%;
-    --footer-hope-y: 50%;
-  }
+
   .nav-link {
     font-size: 0.7rem;
   }
@@ -1142,6 +1152,12 @@ img {
   }
 }
 
+@media (min-width: 769px) and (max-width: 1024px) {
+  .footer-container {
+    transform: translateY(-20px);
+  }
+}
+
 /* Mobile */
 @media (max-width: 768px) {
   .header {
@@ -1150,10 +1166,6 @@ img {
 
   .header.scrolled {
     backdrop-filter: none;
-  }
-
-  .footer {
-    --footer-hope-bleed: 0%;
   }
 
   .hero,
