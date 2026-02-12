@@ -34,11 +34,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
     document.documentElement.style.setProperty('--vh', `${viewportHeight * 0.01}px`);
   };
+  let vhUpdateRaf = 0;
+  const scheduleVhVarUpdate = () => {
+    if (vhUpdateRaf) return;
+    vhUpdateRaf = window.requestAnimationFrame(() => {
+      vhUpdateRaf = 0;
+      setVhVar();
+    });
+  };
   setVhVar();
-  window.addEventListener('resize', setVhVar);
-  window.addEventListener('orientationchange', setVhVar);
-  window.visualViewport?.addEventListener('resize', setVhVar);
-  window.visualViewport?.addEventListener('scroll', setVhVar);
+  window.addEventListener('resize', scheduleVhVarUpdate, { passive: true });
+  window.addEventListener('orientationchange', () => {
+    // iOS often reports the final viewport size slightly after orientationchange.
+    window.setTimeout(setVhVar, 120);
+  });
+  window.visualViewport?.addEventListener('resize', scheduleVhVarUpdate, { passive: true });
 
   // Prevent iOS rubber-band overscroll on our custom scroll container (avoids the "zoom" bounce at the very bottom)
   if ((isIPhone || isIPad) && pageScroll) {
@@ -63,6 +73,10 @@ document.addEventListener('DOMContentLoaded', () => {
       (e) => {
         if (!e.cancelable) return;
         if (document.body.classList.contains('scroll-locked')) return;
+        if ((e.touches?.length ?? 0) > 1) return;
+        if ((pageScroll.scrollHeight || 0) <= (pageScroll.clientHeight || 0)) return;
+        const target = e.target;
+        if (target instanceof Element && target.closest('input, textarea, select, [contenteditable="true"]')) return;
 
         const currentTouchY = e.touches?.[0]?.clientY ?? lastTouchY;
         const deltaY = currentTouchY - lastTouchY;
@@ -108,11 +122,15 @@ document.addEventListener('DOMContentLoaded', () => {
       (e) => {
         if (document.body.classList.contains('scroll-locked')) return;
         if (!e.cancelable) return;
+        if ((e.touches?.length ?? 0) > 1) return;
         const currentTouchY = e.touches?.[0]?.clientY ?? lastTouchY;
         const deltaY = currentTouchY - lastTouchY;
         lastTouchY = currentTouchY;
 
         const scrollingElement = getScrollingElement();
+        if ((scrollingElement.scrollHeight || 0) <= (scrollingElement.clientHeight || 0)) return;
+        const target = e.target;
+        if (target instanceof Element && target.closest('input, textarea, select, [contenteditable="true"]')) return;
         const scrollTop = scrollingElement.scrollTop || 0;
         const scrollHeight = scrollingElement.scrollHeight || 0;
         const clientHeight = scrollingElement.clientHeight || 0;
